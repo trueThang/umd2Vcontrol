@@ -2,6 +2,7 @@ import time
 import paho.mqtt.client as mqtt
 
 def main():
+    ''''''''
     print("Python Side")
     cli = mqtt.Client()
     cli.on_connect, cli.on_message = on_connect, on_message
