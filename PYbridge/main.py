@@ -1,3 +1,4 @@
+
 import time
 import paho.mqtt.client as mqtt
 
@@ -20,13 +21,8 @@ def delay_search():
 def on_connect(cli, ud, flg, rc):
     cli.subscribe("vb_to_py")
 
-def on_message(cli, ud, msg):
-    print("VB says:", msg.payload.decode())
-    delay_search()
-    #cli.publish("py_to_vb", f"ACK {msg.payload.decode()}")
-    text = "Adjusted Voltage!"
-    print(text)
-    cli.publish("py_to_vb", text)
+def on_message(cli, ud, msg): #unloads what vb bridge sends -> then use it
+    data = msg.payload.decode()
 
 
 

@@ -66,7 +66,7 @@ Module MQTTBridge
     End Function
 
     'Topic is vb_to_py ******************************************************************************************
-    Public Async Function SendToPython(text As String) As Task
+    Private Async Function SendToPython(text As String) As Task
         Await mClient.PublishAsync("vb_to_py",
                                    text,
                                    MqttQualityOfServiceLevel.AtLeastOnce)
@@ -74,7 +74,7 @@ Module MQTTBridge
     '****************************************************************************************************************
     ''' <summary>
     ''' Returns str to publish to be called
-    ''' Change this so this to get and read graph malformed and send instructions to python
+    ''' ****Change this so this to get and read graph malformed and send instructions to python !!!
     ''' </summary>
     Public Function Message()
         Dim text = "Graph is malformed!!!"

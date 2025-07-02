@@ -1051,6 +1051,9 @@ Public Class MainForm
                                 captureFile.Write("R:" + values(0) + " M:" + values(1) + " D:" + values(2) + " V:" + values(3) + " P:" + values(4) + " N:" + values(5) + "T" + vbCrLf)
                             ElseIf TestmodeFlag = 0 And Not TMWaveformFlag = 1 Then  ' Capture the only Displacement and SN if normal mode
                                 captureFile.Write("D:" + values(2) + " N:" + values(5) + vbCrLf)
+                                ''''''''''''''''''' Add program here to call VBbridge and send data value2
+
+                                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                             End If
                         End If
 
