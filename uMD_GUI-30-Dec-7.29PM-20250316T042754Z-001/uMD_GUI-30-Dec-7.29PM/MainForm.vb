@@ -943,7 +943,6 @@ Public Class MainForm
     ''' <summary>
     ''' ''''''''''''''''''''''''''''''''''''''''''''''''''''''' end of initialize bridge
     ''' </summary>
-    ''' <param name="[text]"></param>
     Private Async Sub SetText(ByVal [text] As String)
         ' InvokeRequired required compares the thread ID of the 
         ' calling thread to the thread ID of the creating thread. 
