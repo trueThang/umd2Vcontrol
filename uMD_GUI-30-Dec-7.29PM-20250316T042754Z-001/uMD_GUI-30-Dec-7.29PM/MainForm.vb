@@ -926,8 +926,25 @@ Public Class MainForm
             MsgBox(ex.ToString)
         End Try
     End Sub
+    ''' <summary>
+    ''' '''''''''''''''''''''''''''''''''''''''''''''''''''''''' Initalizes bridge to call mqtt and send value2 as well as safeguard
+    ''' </summary>
+    Private ReadOnly _bridge As New MqttBridge()
+    Private _mqttStarted As Boolean
+    Private Async Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not _mqttStarted Then
+            ' replace with your real broker address/port
+            Await _bridge.ConnectAsync("localhost", 1883)
+            _mqttStarted = True
+            Console.WriteLine("✅ MQTT bridge connected")
 
-    Private Sub SetText(ByVal [text] As String)
+        End If
+    End Sub
+    ''' <summary>
+    ''' ''''''''''''''''''''''''''''''''''''''''''''''''''''''' end of initialize bridge
+    ''' </summary>
+    ''' <param name="[text]"></param>
+    Private Async Sub SetText(ByVal [text] As String)
         ' InvokeRequired required compares the thread ID of the 
         ' calling thread to the thread ID of the creating thread. 
         ' If these threads are different, it returns true. 
@@ -1051,8 +1068,11 @@ Public Class MainForm
                                 captureFile.Write("R:" + values(0) + " M:" + values(1) + " D:" + values(2) + " V:" + values(3) + " P:" + values(4) + " N:" + values(5) + "T" + vbCrLf)
                             ElseIf TestmodeFlag = 0 And Not TMWaveformFlag = 1 Then  ' Capture the only Displacement and SN if normal mode
                                 captureFile.Write("D:" + values(2) + " N:" + values(5) + vbCrLf)
-                                ''''''''''''''''''' Add program here to call VBbridge and send data value2
+                                '''''''''''''''''''''''''''''''''''''' Add program here to call VBbridge and send data value2 ''''''''''''''''''''''''''''''''''''''
+                                Dim v2 As String = values(2).ToString()
 
+                                ' call your newly-parameterized function
+                                Await _bridge.PublishAsync(v2)
                                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                             End If
                         End If
@@ -1206,11 +1226,11 @@ Public Class MainForm
 
                                 PreviousAverage = average
                                 averagingFromPrevious = (0 + averagingValue / 1000) * average ' nm
-                                averagingFromCurrent = (1.0 - averagingValue / 1000) * straightnessMultiplier * (currentValue - zeroAdjustment) / multiplierCombined
+                                averagingFromCurrent = (1.0 - averagingValue / 1000) * straightnessMultiplier * (currentValue - zeroAdjustment) / MultiplierCombined
                                 average = averagingFromPrevious + averagingFromCurrent
 
                                 velocityFromPrevious = (0 + averagingValue / 1000) * velocity ' nm
-                                velocityFromCurrent = velocityValue * (1.0 - averagingValue / 1000) / multiplierCombined
+                                velocityFromCurrent = velocityValue * (1.0 - averagingValue / 1000) / MultiplierCombined
                                 velocity = velocityFromPrevious + velocityFromCurrent
 
                                 angleFromPrevious = (0 + averagingValue / 1000) * angle
@@ -1219,13 +1239,13 @@ Public Class MainForm
 
                                 If MultipleAxesFlag > 1 Then
 
-                                    average1 = straightnessMultiplier * (currentValue1 - zeroAdjustment1) / multiplierCombined
-                                    average2 = straightnessMultiplier * (currentValue2 - zeroAdjustment2) / multiplierCombined
-                                    average3 = straightnessMultiplier * (currentValue3 - zeroAdjustment3) / multiplierCombined
+                                    average1 = straightnessMultiplier * (currentValue1 - zeroAdjustment1) / MultiplierCombined
+                                    average2 = straightnessMultiplier * (currentValue2 - zeroAdjustment2) / MultiplierCombined
+                                    average3 = straightnessMultiplier * (currentValue3 - zeroAdjustment3) / MultiplierCombined
 
-                                    velocity1 = velocityValue1 / multiplierCombined
-                                    velocity2 = velocityValue2 / multiplierCombined
-                                    velocity3 = velocityValue3 / multiplierCombined
+                                    velocity1 = velocityValue1 / MultiplierCombined
+                                    velocity2 = velocityValue2 / MultiplierCombined
+                                    velocity3 = velocityValue3 / MultiplierCombined
 
                                     angle1 = angleValue1
                                     angle2 = angleValue2
@@ -1257,14 +1277,14 @@ Public Class MainForm
                                     If IgnoreCount = 0 Then
                                         displacementQueuex.Enqueue(chartcounter)
                                         If Graph_Averaging_CheckBox.Checked = False Then
-                                            displacementQueuey.Enqueue(PrimaryAxisFlip * straightnessMultiplier * unitCorrectmm * (currentValue - zeroAdjustment) / multiplierCombined)
+                                            displacementQueuey.Enqueue(PrimaryAxisFlip * straightnessMultiplier * unitCorrectmm * (currentValue - zeroAdjustment) / MultiplierCombined)
                                         Else
                                             displacementQueuey.Enqueue(PrimaryAxisFlip * average * unitCorrectmm)
                                         End If
 
                                         velocityQueuex.Enqueue(chartcounter)
                                         If Graph_Averaging_CheckBox.Checked = False Then
-                                            velocityQueuey.Enqueue(PrimaryAxisFlip * unitCorrectmm * velocityValue / multiplierCombined)
+                                            velocityQueuey.Enqueue(PrimaryAxisFlip * unitCorrectmm * velocityValue / MultiplierCombined)
                                         Else
                                             velocityQueuey.Enqueue(PrimaryAxisFlip * velocity * unitCorrectmm)
                                         End If
@@ -1290,10 +1310,10 @@ Public Class MainForm
                     Else 'values.length incorrect
                         Console.Write("values.length incorrect " + values.Length.ToString + vbCrLf)
                     End If
-                        Try
-                            previousserialnumber = Convert.ToUInt64(values(5))
-                        Catch
-                        End Try
+                    Try
+                        previousserialnumber = Convert.ToUInt64(values(5))
+                    Catch
+                    End Try
                 Next
             Catch ex As Exception
                 'MsgBox(ex.ToString)
