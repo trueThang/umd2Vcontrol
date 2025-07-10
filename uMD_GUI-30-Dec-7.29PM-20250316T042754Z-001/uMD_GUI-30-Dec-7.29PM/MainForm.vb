@@ -1061,18 +1061,18 @@ Public Class MainForm
                         AxisData(0, 2) = AxisData(PrimaryAxisSelect, 2) ' Primary TotalDistance
                         AxisData(0, 3) = AxisData(PrimaryAxisSelect, 3) ' Primary VelocityCount
                         AxisData(0, 4) = AxisData(PrimaryAxisSelect, 4) ' Primary PhaseValue
+                        '''''''''''''''''''''''''''''''''''''' Add program here to call VBbridge and send data value2 ''''''''''''''''''''''''''''''''''''''
+                        Dim v2 As String = values(2).ToString()
 
+                        ' call your newly-parameterized function
+                        Await _bridge.PublishAsync(v2)
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         If Not (captureFile Is Nothing) And Capture_Flag = 1 And IgnoreCount = 0 Then
                             If TestmodeFlag = 1 Then  ' Capture all in Test Mode 
                                 captureFile.Write("R:" + values(0) + " M:" + values(1) + " D:" + values(2) + " V:" + values(3) + " P:" + values(4) + " N:" + values(5) + "T" + vbCrLf)
                             ElseIf TestmodeFlag = 0 And Not TMWaveformFlag = 1 Then  ' Capture the only Displacement and SN if normal mode
                                 captureFile.Write("D:" + values(2) + " N:" + values(5) + vbCrLf)
-                                '''''''''''''''''''''''''''''''''''''' Add program here to call VBbridge and send data value2 ''''''''''''''''''''''''''''''''''''''
-                                Dim v2 As String = values(2).ToString()
 
-                                ' call your newly-parameterized function
-                                Await _bridge.PublishAsync(v2)
-                                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                             End If
                         End If
 
@@ -2849,6 +2849,10 @@ Public Class MainForm
         ErrorFlag = 0
         '       needsInitialZero = 1
         IgnoreCount = 0
+    End Sub
+
+    Private Sub ValueDisplay_Click(sender As Object, e As EventArgs) Handles ValueDisplay.Click
+
     End Sub
 
     Private Sub Axis3_Label_Click(sender As Object, e As EventArgs) Handles Axis3_Label.Click

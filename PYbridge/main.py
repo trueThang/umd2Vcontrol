@@ -19,11 +19,18 @@ def delay_search():
     print()##animated search... 
 
 def on_connect(cli, ud, flg, rc):
-    cli.subscribe("vb_to_py")
+    
+    connect = cli.subscribe("vb_to_py")
+    if connect == True:
+        print("Python connected")
+
 
 def on_message(cli, ud, msg): #unloads what vb bridge sends -> then use it
+    print("Recieved:")
+    print(msg)
     data = msg.payload.decode()
-
+    print(data)
+    
 
 
 if __name__=="__main__":

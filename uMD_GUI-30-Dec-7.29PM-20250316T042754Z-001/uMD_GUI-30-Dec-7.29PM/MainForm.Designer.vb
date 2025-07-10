@@ -179,7 +179,7 @@ Partial Public Class MainForm
         Me.TrackBar1.Location = New System.Drawing.Point(375, 137)
         Me.TrackBar1.Maximum = 999
         Me.TrackBar1.Name = "TrackBar1"
-        Me.TrackBar1.Size = New System.Drawing.Size(141, 56)
+        Me.TrackBar1.Size = New System.Drawing.Size(141, 90)
         Me.TrackBar1.TabIndex = 46
         Me.TrackBar1.TickFrequency = 10
         Me.TrackBar1.TickStyle = System.Windows.Forms.TickStyle.None
@@ -190,7 +190,7 @@ Partial Public Class MainForm
         Me.Averaging_Label.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Averaging_Label.Location = New System.Drawing.Point(296, 136)
         Me.Averaging_Label.Name = "Averaging_Label"
-        Me.Averaging_Label.Size = New System.Drawing.Size(107, 25)
+        Me.Averaging_Label.Size = New System.Drawing.Size(170, 37)
         Me.Averaging_Label.TabIndex = 47
         Me.Averaging_Label.Text = "Averaging:"
         '
@@ -348,7 +348,7 @@ Partial Public Class MainForm
         Me.TestModeLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.TestModeLabel.Location = New System.Drawing.Point(30, 70)
         Me.TestModeLabel.Name = "TestModeLabel"
-        Me.TestModeLabel.Size = New System.Drawing.Size(149, 22)
+        Me.TestModeLabel.Size = New System.Drawing.Size(231, 35)
         Me.TestModeLabel.TabIndex = 80
         Me.TestModeLabel.Text = "Simulated Data"
         '
@@ -380,7 +380,7 @@ Partial Public Class MainForm
         Me.NumericUpDown_Scale.Maximum = New Decimal(New Integer() {25, 0, 0, 0})
         Me.NumericUpDown_Scale.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_Scale.Name = "NumericUpDown_Scale"
-        Me.NumericUpDown_Scale.Size = New System.Drawing.Size(38, 23)
+        Me.NumericUpDown_Scale.Size = New System.Drawing.Size(38, 32)
         Me.NumericUpDown_Scale.TabIndex = 84
         Me.NumericUpDown_Scale.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericUpDown_Scale.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -392,7 +392,7 @@ Partial Public Class MainForm
         Me.EDOff_Label.ForeColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(100, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.EDOff_Label.Location = New System.Drawing.Point(31, 86)
         Me.EDOff_Label.Name = "EDOff_Label"
-        Me.EDOff_Label.Size = New System.Drawing.Size(184, 22)
+        Me.EDOff_Label.Size = New System.Drawing.Size(285, 35)
         Me.EDOff_Label.TabIndex = 85
         Me.EDOff_Label.Text = "Error Detection Off"
         '
@@ -404,7 +404,7 @@ Partial Public Class MainForm
         Me.ComboBox_Range.MaximumSize = New System.Drawing.Size(55, 0)
         Me.ComboBox_Range.Name = "ComboBox_Range"
         Me.ComboBox_Range.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.ComboBox_Range.Size = New System.Drawing.Size(48, 25)
+        Me.ComboBox_Range.Size = New System.Drawing.Size(48, 34)
         Me.ComboBox_Range.TabIndex = 86
         Me.ComboBox_Range.Text = "Auto"
         '
@@ -496,7 +496,7 @@ Partial Public Class MainForm
         Me.ComboBox_DFT_Range.MaximumSize = New System.Drawing.Size(100, 0)
         Me.ComboBox_DFT_Range.Name = "ComboBox_DFT_Range"
         Me.ComboBox_DFT_Range.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.ComboBox_DFT_Range.Size = New System.Drawing.Size(42, 25)
+        Me.ComboBox_DFT_Range.Size = New System.Drawing.Size(42, 34)
         Me.ComboBox_DFT_Range.TabIndex = 99
         Me.ComboBox_DFT_Range.Text = "100"
         Me.ComboBox_DFT_Range.Visible = False
@@ -507,7 +507,7 @@ Partial Public Class MainForm
         Me.DFT_Hz.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DFT_Hz.Location = New System.Drawing.Point(545, 245)
         Me.DFT_Hz.Name = "DFT_Hz"
-        Me.DFT_Hz.Size = New System.Drawing.Size(27, 18)
+        Me.DFT_Hz.Size = New System.Drawing.Size(41, 29)
         Me.DFT_Hz.TabIndex = 100
         Me.DFT_Hz.Text = "Hz"
         Me.DFT_Hz.Visible = False
@@ -520,7 +520,7 @@ Partial Public Class MainForm
         Me.Logfile_Text.Location = New System.Drawing.Point(108, 102)
         Me.Logfile_Text.MaximumSize = New System.Drawing.Size(200, 0)
         Me.Logfile_Text.Name = "Logfile_Text"
-        Me.Logfile_Text.Size = New System.Drawing.Size(101, 22)
+        Me.Logfile_Text.Size = New System.Drawing.Size(157, 35)
         Me.Logfile_Text.TabIndex = 101
         Me.Logfile_Text.Text = "Logfile.txt"
         '
@@ -532,7 +532,7 @@ Partial Public Class MainForm
         Me.Logfile_Label.Location = New System.Drawing.Point(31, 102)
         Me.Logfile_Label.MaximumSize = New System.Drawing.Size(200, 0)
         Me.Logfile_Label.Name = "Logfile_Label"
-        Me.Logfile_Label.Size = New System.Drawing.Size(105, 22)
+        Me.Logfile_Label.Size = New System.Drawing.Size(161, 35)
         Me.Logfile_Label.TabIndex = 102
         Me.Logfile_Label.Text = "Log File is"
         '
@@ -546,7 +546,7 @@ Partial Public Class MainForm
         Me.RangeUnits.MinimumSize = New System.Drawing.Size(10, 20)
         Me.RangeUnits.Name = "RangeUnits"
         Me.RangeUnits.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.RangeUnits.Size = New System.Drawing.Size(37, 20)
+        Me.RangeUnits.Size = New System.Drawing.Size(58, 20)
         Me.RangeUnits.TabIndex = 103
         Me.RangeUnits.Text = "mm"
         '
@@ -579,7 +579,7 @@ Partial Public Class MainForm
         Me.Phase_Label.ForeColor = System.Drawing.Color.Blue
         Me.Phase_Label.Location = New System.Drawing.Point(44, 4)
         Me.Phase_Label.Name = "Phase_Label"
-        Me.Phase_Label.Size = New System.Drawing.Size(43, 22)
+        Me.Phase_Label.Size = New System.Drawing.Size(67, 35)
         Me.Phase_Label.TabIndex = 106
         Me.Phase_Label.Text = "PH:"
         '
@@ -592,7 +592,7 @@ Partial Public Class MainForm
         Me.Graph_Averaging_CheckBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Graph_Averaging_CheckBox.Location = New System.Drawing.Point(118, 240)
         Me.Graph_Averaging_CheckBox.Name = "Graph_Averaging_CheckBox"
-        Me.Graph_Averaging_CheckBox.Size = New System.Drawing.Size(219, 29)
+        Me.Graph_Averaging_CheckBox.Size = New System.Drawing.Size(353, 41)
         Me.Graph_Averaging_CheckBox.TabIndex = 107
         Me.Graph_Averaging_CheckBox.Text = " Graph Averaging On"
         Me.Graph_Averaging_CheckBox.UseVisualStyleBackColor = True
@@ -604,7 +604,7 @@ Partial Public Class MainForm
         Me.PORTB_Label.ForeColor = System.Drawing.Color.Blue
         Me.PORTB_Label.Location = New System.Drawing.Point(120, 4)
         Me.PORTB_Label.Name = "PORTB_Label"
-        Me.PORTB_Label.Size = New System.Drawing.Size(122, 22)
+        Me.PORTB_Label.Size = New System.Drawing.Size(191, 35)
         Me.PORTB_Label.TabIndex = 109
         Me.PORTB_Label.Text = "PBA RM RP:"
         '
@@ -626,7 +626,7 @@ Partial Public Class MainForm
         Me.REFMEAS_Label.ForeColor = System.Drawing.Color.Blue
         Me.REFMEAS_Label.Location = New System.Drawing.Point(274, 4)
         Me.REFMEAS_Label.Name = "REFMEAS_Label"
-        Me.REFMEAS_Label.Size = New System.Drawing.Size(125, 22)
+        Me.REFMEAS_Label.Size = New System.Drawing.Size(197, 35)
         Me.REFMEAS_Label.TabIndex = 111
         Me.REFMEAS_Label.Text = "RMA RM RP:"
         '
@@ -648,7 +648,7 @@ Partial Public Class MainForm
         Me.Phase_Error_Label.ForeColor = System.Drawing.Color.Blue
         Me.Phase_Error_Label.Location = New System.Drawing.Point(426, 4)
         Me.Phase_Error_Label.Name = "Phase_Error_Label"
-        Me.Phase_Error_Label.Size = New System.Drawing.Size(48, 22)
+        Me.Phase_Error_Label.Size = New System.Drawing.Size(73, 35)
         Me.Phase_Error_Label.TabIndex = 113
         Me.Phase_Error_Label.Text = " PE:"
         '
@@ -703,7 +703,7 @@ Partial Public Class MainForm
         Me.Axis1_Label.ForeColor = System.Drawing.Color.BlueViolet
         Me.Axis1_Label.Location = New System.Drawing.Point(41, 47)
         Me.Axis1_Label.Name = "Axis1_Label"
-        Me.Axis1_Label.Size = New System.Drawing.Size(73, 22)
+        Me.Axis1_Label.Size = New System.Drawing.Size(113, 35)
         Me.Axis1_Label.TabIndex = 117
         Me.Axis1_Label.Text = "Axis 1:"
         Me.Axis1_Label.Visible = False
@@ -715,7 +715,7 @@ Partial Public Class MainForm
         Me.Axis2_Label.ForeColor = System.Drawing.Color.Black
         Me.Axis2_Label.Location = New System.Drawing.Point(282, 47)
         Me.Axis2_Label.Name = "Axis2_Label"
-        Me.Axis2_Label.Size = New System.Drawing.Size(73, 22)
+        Me.Axis2_Label.Size = New System.Drawing.Size(113, 35)
         Me.Axis2_Label.TabIndex = 119
         Me.Axis2_Label.Text = "Axis 2:"
         Me.Axis2_Label.Visible = False
@@ -738,7 +738,7 @@ Partial Public Class MainForm
         Me.Axis3_Label.ForeColor = System.Drawing.Color.Black
         Me.Axis3_Label.Location = New System.Drawing.Point(515, 47)
         Me.Axis3_Label.Name = "Axis3_Label"
-        Me.Axis3_Label.Size = New System.Drawing.Size(73, 22)
+        Me.Axis3_Label.Size = New System.Drawing.Size(113, 35)
         Me.Axis3_Label.TabIndex = 121
         Me.Axis3_Label.Text = "Axis 3:"
         Me.Axis3_Label.Visible = False
@@ -1004,7 +1004,7 @@ Partial Public Class MainForm
         Me.DP32_PRC_Percent_Label.ForeColor = System.Drawing.Color.Blue
         Me.DP32_PRC_Percent_Label.Location = New System.Drawing.Point(618, 4)
         Me.DP32_PRC_Percent_Label.Name = "DP32_PRC_Percent_Label"
-        Me.DP32_PRC_Percent_Label.Size = New System.Drawing.Size(79, 22)
+        Me.DP32_PRC_Percent_Label.Size = New System.Drawing.Size(123, 35)
         Me.DP32_PRC_Percent_Label.TabIndex = 132
         Me.DP32_PRC_Percent_Label.Text = "PRC %:"
         '
@@ -1026,7 +1026,7 @@ Partial Public Class MainForm
         Me.Sample_Frequency_Label.ForeColor = System.Drawing.Color.Blue
         Me.Sample_Frequency_Label.Location = New System.Drawing.Point(506, 4)
         Me.Sample_Frequency_Label.Name = "Sample_Frequency_Label"
-        Me.Sample_Frequency_Label.Size = New System.Drawing.Size(70, 22)
+        Me.Sample_Frequency_Label.Size = New System.Drawing.Size(108, 35)
         Me.Sample_Frequency_Label.TabIndex = 134
         Me.Sample_Frequency_Label.Text = "SF Hz:"
         '
@@ -1048,7 +1048,7 @@ Partial Public Class MainForm
         Me.DP32_COM_Percent_Label.ForeColor = System.Drawing.Color.Blue
         Me.DP32_COM_Percent_Label.Location = New System.Drawing.Point(729, 4)
         Me.DP32_COM_Percent_Label.Name = "DP32_COM_Percent_Label"
-        Me.DP32_COM_Percent_Label.Size = New System.Drawing.Size(85, 22)
+        Me.DP32_COM_Percent_Label.Size = New System.Drawing.Size(129, 35)
         Me.DP32_COM_Percent_Label.TabIndex = 136
         Me.DP32_COM_Percent_Label.Text = "COM %:"
         '
