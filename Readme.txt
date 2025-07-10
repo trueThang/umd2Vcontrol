@@ -13,5 +13,7 @@ This is an integrated mqtt.vb into uMD.gui which UMD.gui calles
 ~~ Line edited is 1071 and 944
 
 
-********* Troubleshoots and notes **********************
+********* Troubleshoots and tracking **********************
 - Need to test with getting continued data -> Need to check if it keeps connecting and reconnecting to the server
+
+- Need to implement a voltage controller that uses moku api to change the voltage used for pizo (current)
