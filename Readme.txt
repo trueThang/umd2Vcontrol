@@ -13,5 +13,5 @@ This is an integrated mqtt.vb into uMD.gui which UMD.gui calles
 ~~ Line edited is 1071 and 944
 
 
-********* Troubleshoot **********************
+********* Troubleshoots and notes **********************
 - Need to test with getting continued data -> Need to check if it keeps connecting and reconnecting to the server
