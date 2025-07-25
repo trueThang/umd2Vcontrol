@@ -21,7 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="controller.py" />
+    <Compile Include="moku.py" />
     <Compile Include="mqtt.py" />
   </ItemGroup>
   <ItemGroup>
