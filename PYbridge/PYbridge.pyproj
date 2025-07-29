@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>f051c709-3f65-4c32-832a-0997f3143994</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>mqtt.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="moku.py" />
+    <Compile Include="parse_data.py" />
+    <Compile Include="main.py" />
+    <Compile Include="moku_device.py" />
     <Compile Include="mqtt.py" />
   </ItemGroup>
   <ItemGroup>
