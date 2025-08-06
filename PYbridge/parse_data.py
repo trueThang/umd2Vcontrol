@@ -2,7 +2,6 @@
 import pandas as pd
 
 class To_Csv():
-    print('change')
 
     #take name of folder open csv file/make
     def open_file(self, name):
