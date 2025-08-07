@@ -9,6 +9,9 @@ VB: .WithTcpServer("test.mosquitto.org", 1883)
 
 VB MQTT requires MQTTnet (version 3.1.2 or lower to work with this code) and MQTTnet.Extensions.ManagedClient (version 3.1.2 or lower) packages
 
+Required .net developer 4.6.1 :
+https://www.microsoft.com/en-us/download/details.aspx?id=49978
+
 This is an integrated mqtt.vb into uMD.gui which UMD.gui calles 
 ~~ Line edited is 1071 and 944
 
