@@ -33,13 +33,17 @@ def main():
 
         #connect to moku and initalize
         moku = Ctrl_Moku()
-        csv = To_Csv()
-        
+
         if not mqtt or not moku: #check to see if mqtt and moku are initialized
             raise Exception("Failed to initialize MQTT or Moku connection.")
         
-        initial_vpp = moku.set_voltage(5)
-        data = mqtt.latest_value()  # Get the latest value from MQTT
+        initial_vpp = moku.set_voltage(-2.5) #set voltage to 0 as default
+        
+        while not stop_flag: #while stop flag isnt triggered, keep getting data
+
+            data = mqtt.latest_value()  # Get the latest value from MQTT
+            print(data)
+
 
 
 
