@@ -1,4 +1,5 @@
 #not implemented yet
+import math
 import time
 from moku.instruments import WaveformGenerator
 
@@ -13,9 +14,11 @@ class Ctrl_Moku():
         #self.ip = input("Enter Moku IP address: ") #get IP
 
         #parameters
-        self.AMP = 5
+        self.AMP = 2.5
         self.FREQ = 1
         self.WAVE = "Sine"
+        
+
             
         self.try_connect = self.connect() # initialize connection to Moku device   
 
@@ -37,14 +40,24 @@ class Ctrl_Moku():
         try:
 
             self.inst.generate_waveform(channel=1, type=self.WAVE, amplitude=self.AMP, frequency=self.FREQ, offset=dc_level)
-            print(f"Setting Amplitude: {dc_level} V")
+            print(f"Setting Voltage: {dc_level} V")
 
         except Exception as e:
             print(f"Error:{e}")
     
     #recieves time, offset, measured
-    def pid_controller(self):
-        pass
+    def pid_controller(self, start_time, og_offset, data, kp):
+        t = time.time() - start_time #to get inteval
+
+        setpoint = self.AMP * math.sin(2 * math.pi * self.FREQ * t) + og_offset
+        print(setpoint)
+        #error checking if measured is a none integer or just getting 0's
+        if data is not None or 0:
+            error = setpoint - data
+            correction = kp * error #the amount adjusted to compansate for error
+            new_voltage = og_offset + correction
+
+            return new_voltage
 
 
     def disconnect(self): #tells moku to disconnect for programs that doesn't force conenct
