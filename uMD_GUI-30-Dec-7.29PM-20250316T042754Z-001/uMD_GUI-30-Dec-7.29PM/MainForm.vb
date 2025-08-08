@@ -1061,12 +1061,7 @@ Public Class MainForm
                         AxisData(0, 2) = AxisData(PrimaryAxisSelect, 2) ' Primary TotalDistance
                         AxisData(0, 3) = AxisData(PrimaryAxisSelect, 3) ' Primary VelocityCount
                         AxisData(0, 4) = AxisData(PrimaryAxisSelect, 4) ' Primary PhaseValue
-                        '''''''''''''''''''''''''''''''''''''' Add program here to call VBbridge and send data value2 ''''''''''''''''''''''''''''''''''''''
-                        Dim v2 As String = values(2).ToString()
 
-                        ' call your newly-parameterized function
-                        Await _bridge.PublishAsync(v2)
-                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         If Not (captureFile Is Nothing) And Capture_Flag = 1 And IgnoreCount = 0 Then
                             If TestmodeFlag = 1 Then  ' Capture all in Test Mode 
                                 captureFile.Write("R:" + values(0) + " M:" + values(1) + " D:" + values(2) + " V:" + values(3) + " P:" + values(4) + " N:" + values(5) + "T" + vbCrLf)
@@ -1124,6 +1119,14 @@ Public Class MainForm
 
                         ' currentValue = (Convert.ToDouble(values(2)) - CurrentValuePhase) * Wavelength / 2.0 - CurrentValueCorrection ' Difference in nm; 1/2 wavelength, because path traveled at least twice
                         currentValue = (Convert.ToDouble(AxisData(0, 2)) - CurrentValuePhase) * Wavelength / 2.0 - CurrentValueCorrection ' Difference in nm; 1/2 wavelength, because path traveled at least twice
+
+                        '''''''''''''''''''''''''''''''''''''' Add program here to call VBbridge and send data value2 ''''''''''''''''''''''''''''''''''''''
+                        Dim v2 As String = currentValue.ToString()
+
+                        ' call your newly-parameterized function
+                        Await _bridge.PublishAsync(v2)
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
                         ' velocityValue = Convert.ToDouble(values(3)) * Wavelength / 2.0 * SampleFrequency ' Velocity = displacement difference in 1/SampleFrequencys * SampleFrequency
                         velocityValue = (currentValue - previousValue) * SampleFrequency
                         If (Configuration.Encoder_Checkbox.Checked = False) Then

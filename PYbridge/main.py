@@ -3,8 +3,6 @@ import os
 import sys
 import time
 import signal
-import threading as thread
-from tracemalloc import stop
 import pandas as pd
 from parse_data import To_Csv
 from moku_device import Ctrl_Moku
@@ -41,46 +39,16 @@ def main():
             raise Exception("Failed to initialize MQTT or Moku connection.")
         
         initial_vpp = moku.set_voltage(5)
-        file = "data.csv" #ending in .csv
-        status = True #for readbility
-        csv.open_file(file)
-
-        while not stop_flag: #loop until stop_flag is set
-
-            #get data from message
-            data = mqtt.latest_value()
-
-            #if decoded data shows zero then skip to next iteration
-            if data == 0.0 or data == 0:
-                time.sleep(0.01)
-
-                while status:
-                    print("Zero detected...skippping...")
-                    status = False
-                    
-                continue
-            
-            #put data into csv name file
-            csv.write_file(file, data)
-            print(data)
+        data = mqtt.latest_value()  # Get the latest value from MQTT
 
 
-        #plot the data
+
 
     except Exception as e:
         print(f"error: {e}")
         sys.exit(0)
 
-    finally:
-        if os.path.exists(file):
-            csv.calc_dis(file)
-            print("Displacement calculated")
-
 
 
 if __name__ == "__main__":
     main()
-
-
-
-
