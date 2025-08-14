@@ -48,7 +48,7 @@ def main():
         while not stop_flag: #while stop flag isnt triggered, keep getting data
 
             data = mqtt.latest_value()  # Get the latest value from MQTT; Measured
-            #print(data)
+            
 
             if ky.is_pressed("up"):
                 off_set += 0.5
@@ -56,7 +56,7 @@ def main():
                 off_set -= 0.5
             
             print(off_set)
-            #new_offset = moku.pid_controller(start_time, off_set, data, kp)
+            new_offset = moku.pid_controller(start_time, off_set, data, kp)
 
             #clamping V 
             if off_set > 5:

@@ -14,7 +14,7 @@ class Ctrl_Moku():
         #self.ip = input("Enter Moku IP address: ") #get IP
 
         #parameters
-        self.AMP = 2.5
+        self.AMP = 5
         self.FREQ = 1
         self.WAVE = "Sine"
         
@@ -50,6 +50,7 @@ class Ctrl_Moku():
         t = time.time() - start_time #to get inteval
 
         setpoint = self.AMP * math.sin(2 * math.pi * self.FREQ * t) + og_offset
+        
         print(setpoint)
         #error checking if measured is a none integer or just getting 0's
         if data is not None or 0:
