@@ -46,19 +46,10 @@ class Ctrl_Moku():
             print(f"Error:{e}")
     
     #recieves time, offset, measured
-    def pid_controller(self, start_time, og_offset, data, kp):
-        t = time.time() - start_time #to get inteval
-
-        setpoint = self.AMP * math.sin(2 * math.pi * self.FREQ * t) + og_offset
-        
-        print(setpoint)
-        #error checking if measured is a none integer or just getting 0's
-        if data is not None or 0:
-            error = setpoint - data
-            correction = kp * error #the amount adjusted to compansate for error
-            new_voltage = og_offset + correction
-
-            return new_voltage
+    def pid_controller(self, start_time):
+            t = time.time() - start_time  # Calculate elapsed time
+            
+            return
 
 
     def disconnect(self): #tells moku to disconnect for programs that doesn't force conenct

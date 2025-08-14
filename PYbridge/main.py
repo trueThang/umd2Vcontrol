@@ -4,6 +4,7 @@ import keyboard as ky
 import sys
 import time
 import signal
+import numpy as np
 import pandas as pd
 from parse_data import To_Csv
 from moku_device import Ctrl_Moku
@@ -31,41 +32,28 @@ def main():
 
         #get data from VB.net and open measurement gui
         mqtt = Mqtt()
-
         #connect to moku and initalize
         moku = Ctrl_Moku()
 
         if not mqtt or not moku: #check to see if mqtt and moku are initialized
             raise Exception("Failed to initialize MQTT or Moku connection.")
         
-        kp = 0.2
         off_set = 0.0
+        control_max = 0.5
+        control_min = -0.5
         start_time = time.time()
         initial_vpp = moku.set_voltage(off_set) #set voltage to 0 as default
         
-        
         #------------ While getting data
         while not stop_flag: #while stop flag isnt triggered, keep getting data
+            #ideal wave (sine)                  feq             t
+            original_signal = np.sin(2 * np.pi * 1 * (time.time() - start_time))
 
-            data = mqtt.latest_value()  # Get the latest value from MQTT; Measured
+            #get sensor wave data
+            raw_data = mqtt.latest_value()  # Get the latest value from MQTT; 
             
 
-            if ky.is_pressed("up"):
-                off_set += 0.5
-            if ky.is_pressed("down"):
-                off_set -= 0.5
-            
-            print(off_set)
-            new_offset = moku.pid_controller(start_time, off_set, data, kp)
-
-            #clamping V 
-            if off_set > 5:
-                off_set = 5
-            if off_set < -5:
-                off_set = -5
-
-            moku.set_voltage(off_set)
-            time.sleep(0.1) 
+        ##end of while
 
     except Exception as e:
         print(f"error in main.py: {e}")
