@@ -41,14 +41,15 @@ def main():
             raise Exception("Failed to initialize MQTT or Moku connection.")
         
         off_set = 0.0 #initial voltage offset
-        control_max = 0.5 #increment of voltage change (pos)
-        control_min = -0.5 #increment of voltage change (neg)
         buffer_size = 500
 
         
         buffer = deque(maxlen=buffer_size) #initalize buffer and set max rolling sample to 500
         initial_vpp = moku.set_voltage(off_set) #set voltage to 0 as default
-        pid, lpf = pid(Kp=0.8, Ki=0.05, Kd=0.0), lpf(alpha=0.1) #initalize PID and low pass filter
+
+        #initalize PID and low pass filter
+        pid_controller = pid(Kp=0.8, Ki=0.05, Kd=0.0) 
+        low_filter = lpf(alpha=0.1)
 
         #------------ While getting data
         while not stop_flag: #while stop flag isnt triggered, keep getting data
@@ -60,7 +61,7 @@ def main():
             if len(buffer) == buffer_size:
                 #process the buffer to get scaled min/max
                 err = process(buffer)
-                off_set = lpf.update(pid.update(err))
+                off_set = low_filter.update(pid_controller.update(err))
                 moku.set_voltage(off_set) #update voltage offset
 
         #############end of while
