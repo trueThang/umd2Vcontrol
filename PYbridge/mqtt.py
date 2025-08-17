@@ -1,5 +1,5 @@
 
-import queue
+import queue #to add in queue and avoid overwrite
 import subprocess #to run the VB.NET executable
 import paho.mqtt.client as mqtt
 
