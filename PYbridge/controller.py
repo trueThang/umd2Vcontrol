@@ -41,9 +41,13 @@ class Process_Data():
     """
     Process the raw data from the sensor.
     """
-    def __init__(self, buffer):
 
-        df = pd.DataFrame(list(buffer), columns='Raw') # Convert buffer to DataFrame
+    def __init__(self):
+        pass
+
+    def sine_process(self, buffer):
+
+        df = pd.DataFrame(list(buffer), columns=['Raw']) # Convert buffer to DataFrame
         scaler = MinMaxScaler(feature_range=[-1,1]) # Scale data between -1 and 1
         df['normalized'] = scaler.fit_transform(df[['Raw']])
 
@@ -56,5 +60,5 @@ class Process_Data():
 
         current_error = df['error'].iloc[-1] #get the latest error value
 
-        return current_error
+        return float(current_error)
 

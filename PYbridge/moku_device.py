@@ -1,6 +1,4 @@
-#not implemented yet
-import math
-import time
+
 from moku.instruments import WaveformGenerator
 
 
@@ -17,8 +15,6 @@ class Ctrl_Moku():
         self.AMP = 5
         self.FREQ = 1
         self.WAVE = "Sine"
-        
-
             
         self.try_connect = self.connect() # initialize connection to Moku device   
 

@@ -1,12 +1,13 @@
 ﻿
 import os
+import queue
 import sys
 import time
 import signal
 import numpy as np
 import pandas as pd
 from mqtt import Mqtt
-from collections import deque
+from collections import deque #rolling buffer
 from parse_data import To_Csv
 from moku_device import Ctrl_Moku
 from controller import PID as pid, Low_PassFilter as lpf, Process_Data as process
@@ -42,27 +43,36 @@ def main():
         
         off_set = 0.0 #initial voltage offset
         buffer_size = 500
-
+        #pid parameters
+        Kp = 0.8
+        Ki = 0.05
+        Kd = 0.0
         
         buffer = deque(maxlen=buffer_size) #initalize buffer and set max rolling sample to 500
         initial_vpp = moku.set_voltage(off_set) #set voltage to 0 as default
 
         #initalize PID and low pass filter
-        pid_controller = pid(Kp=0.8, Ki=0.05, Kd=0.0) 
+        pid_controller = pid(Kp, Ki, Kd) 
         low_filter = lpf(alpha=0.1)
+        process_data = process()  # Initialize the data processing class
 
         #------------ While getting data
         while not stop_flag: #while stop flag isnt triggered, keep getting data
+            
+            try:
+                #get sensor wave data
+                raw_data = mqtt.q.get(timeout=0.01)  # Get the latest value from MQTT; 
+                buffer.append(raw_data) # Append the latest value to the buffer
 
-            #get sensor wave data
-            raw_data = mqtt.latest_value()  # Get the latest value from MQTT; 
-            buffer.append(raw_data) # Append the latest value to the buffer
+                if len(buffer) == buffer_size:
+                    #process the buffer to get scaled min/max
+                    err = process_data.sine_process(buffer)  # Process the buffer to get the error value
+                    off_set = low_filter.update(pid_controller.update(err))
+                    moku.set_voltage(off_set) #update voltage offset
 
-            if len(buffer) == buffer_size:
-                #process the buffer to get scaled min/max
-                err = process(buffer)
-                off_set = low_filter.update(pid_controller.update(err))
-                moku.set_voltage(off_set) #update voltage offset
+
+            except queue.Empty:
+                pass
 
         #############end of while
 

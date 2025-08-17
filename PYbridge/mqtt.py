@@ -1,4 +1,5 @@
 
+import queue
 import subprocess #to run the VB.NET executable
 import paho.mqtt.client as mqtt
 
@@ -11,6 +12,7 @@ class Mqtt():
         subprocess.Popen(exe_path)
 
         self.value = 0.0  # Initialize value to 0.0
+        self.q = queue.Queue(maxsize=10000)  # Initialize a queue to hold messages
 
         print("Python Side")
         self.cli = mqtt.Client()
@@ -27,18 +29,19 @@ class Mqtt():
             print("Python connected to mqqt topic")
             
 
-
     def on_message(self, cli, ud, msg): #unloads what vb bridge sends -> then use it
-        data = msg.payload.decode()
         
         #check if data is numeric
         try:
-            num = float(data)
-            #print(f"encoded data: {num}\n") #shows the numeric data received for checking
-            self.value = num
+            num = float(msg.payload.decode())
+            try:
+                self.q.put_nowait(num)  # Try to add the value to the queue
+                
+            except queue.Full:
+                #handles overflow: 
+                _ = self.q.get_nowait()  # Remove the oldest item if the queue is full
+                self.q.put_nowait(num)   #add the new value
+
         except ValueError:
             print("Received non-numeric data, ignoring...")
-
-    def latest_value(self):
-        return self.value  # Return the latest numeric value received
         
