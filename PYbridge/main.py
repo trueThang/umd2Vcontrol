@@ -1,14 +1,16 @@
 ﻿
 import os
-import keyboard as ky
 import sys
 import time
 import signal
 import numpy as np
 import pandas as pd
+from mqtt import Mqtt
+from collections import deque
 from parse_data import To_Csv
 from moku_device import Ctrl_Moku
-from mqtt import Mqtt
+from controller import PID as pid, Low_PassFilter as lpf, Process_Data as process
+
 stop_flag = False  # Global flag to indicate when to stop the program
 
 #end signal handler for graceful exit
@@ -38,22 +40,30 @@ def main():
         if not mqtt or not moku: #check to see if mqtt and moku are initialized
             raise Exception("Failed to initialize MQTT or Moku connection.")
         
-        off_set = 0.0
-        control_max = 0.5
-        control_min = -0.5
-        start_time = time.time()
-        initial_vpp = moku.set_voltage(off_set) #set voltage to 0 as default
+        off_set = 0.0 #initial voltage offset
+        control_max = 0.5 #increment of voltage change (pos)
+        control_min = -0.5 #increment of voltage change (neg)
+        buffer_size = 500
+
         
+        buffer = deque(maxlen=buffer_size) #initalize buffer and set max rolling sample to 500
+        initial_vpp = moku.set_voltage(off_set) #set voltage to 0 as default
+        pid, lpf = pid(Kp=0.8, Ki=0.05, Kd=0.0), lpf(alpha=0.1) #initalize PID and low pass filter
+
         #------------ While getting data
         while not stop_flag: #while stop flag isnt triggered, keep getting data
-            #ideal wave (sine)                  feq             t
-            original_signal = np.sin(2 * np.pi * 1 * (time.time() - start_time))
 
             #get sensor wave data
             raw_data = mqtt.latest_value()  # Get the latest value from MQTT; 
-            
+            buffer.append(raw_data) # Append the latest value to the buffer
 
-        ##end of while
+            if len(buffer) == buffer_size:
+                #process the buffer to get scaled min/max
+                err = process(buffer)
+                off_set = lpf.update(pid.update(err))
+                moku.set_voltage(off_set) #update voltage offset
+
+        #############end of while
 
     except Exception as e:
         print(f"error in main.py: {e}")

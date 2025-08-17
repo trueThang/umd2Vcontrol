@@ -44,12 +44,6 @@ class Ctrl_Moku():
 
         except Exception as e:
             print(f"Error:{e}")
-    
-    #recieves time, offset, measured
-    def pid_controller(self, start_time):
-            t = time.time() - start_time  # Calculate elapsed time
-            
-            return
 
 
     def disconnect(self): #tells moku to disconnect for programs that doesn't force conenct

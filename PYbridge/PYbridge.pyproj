@@ -21,6 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="controller.py" />
     <Compile Include="parse_data.py" />
     <Compile Include="main.py" />
     <Compile Include="moku_device.py" />

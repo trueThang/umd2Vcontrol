@@ -14,47 +14,79 @@ create a main to run : mqtt, gui for pid, voltage control
 ------- Notes
 
 
-import math
-import time
-from mqtt import Mqtt  # your class that receives VB displacement
+import numpy as np
+import matplotlib.pyplot as plt
 
-# control parameters
-AMPLITUDE = 5.0           # target displacement in microns
-FREQ = 1.0                # Hz
-GAIN = 0.2                # simple proportional gain
-OFFSET = 0.0              # for DC offset of sine wave
+# --- Simulation parameters ---
+fs = 1000  # Hz
+t_end = 2  # seconds
+t = np.linspace(0, t_end, int(fs * t_end))
+freq = 1  # Hz for the sine wave
 
-def target_sine(t):
-    return AMPLITUDE * math.sin(2 * math.pi * FREQ * t) + OFFSET
+# Original signal (ideal)
+original_signal = np.sin(2 * np.pi * freq * t)
 
-# main loop
+# Deviated signal (distorted by phase lag + noise)
+phase_lag = 0.05  # smaller lag
+noise_amp = 0.05
+np.random.seed(42)
+deviated_signal = np.sin(2 * np.pi * freq * (t - phase_lag)) + noise_amp * np.random.randn(len(t))
 
-mqtt_bridge = Mqtt()
-start_time = time.time()
+# --- PID parameters ---
+Kp = 0.8      # smaller proportional gain
+Ki = 0.05     # small integral gain
+Kd = 0.0      # zero derivative gain
+tau_d = 0.01  # derivative filter (not used here)
+tau_ctrl = 0.1  # larger smoothing for control output
 
-try:
-    while True:
-        t = time.time() - start_time
-        setpoint = target_sine(t)
+# Control output limits
+control_min = -0.5
+control_max = 0.5
 
-        measured = mqtt_bridge.get_latest()
-        if measured is not None:
-            error = setpoint - measured
-            correction = GAIN * error
-            new_voltage = OFFSET + correction
+# --- Initialize variables ---
+dt = 1 / fs
+integral = 0.0
+prev_error = 0.0
+prev_derivative = 0.0
+prev_control = 0.0
+corrected_signal = np.zeros_like(t)
 
-            # safety clamp to prevent overdrive
-            new_voltage = max(min(new_voltage, 10.0), -10.0)
+# --- PID loop ---
+for i in range(len(t)):
+    error = original_signal[i] - deviated_signal[i]
 
-            print(f"[{t:.2f}s] set: {setpoint:.3f}  measured: {measured:.3f}  → voltage: {new_voltage:.3f}")
+    # Integral term with simple anti-windup
+    integral += error * dt
+    integral = np.clip(integral, -1, 1)
 
-            # TODO: send this to Moku
-            # e.g., moku.set_output_voltage(new_voltage)
+    # Derivative (not used here, set zero)
+    raw_derivative = (error - prev_error) / dt
+    derivative = 0
 
-        else:
-            print("Waiting for displacement...")
+    # PID control
+    control_raw = Kp * error + Ki * integral + Kd * derivative
 
-        time.sleep(0.01)  # 100 Hz
+    # Limit control output
+    control_raw = np.clip(control_raw, control_min, control_max)
 
-except KeyboardInterrupt:
-    print("Stopped.")
+    # Low-pass filter control output
+    control = (tau_ctrl / (tau_ctrl + dt)) * prev_control + (dt / (tau_ctrl + dt)) * control_raw
+
+    # Apply correction
+    corrected_signal[i] = deviated_signal[i] + control
+
+    # Store previous values
+    prev_error = error
+    prev_control = control
+
+# --- Plot results ---
+plt.figure(figsize=(10, 6))
+plt.plot(t, original_signal, label="Original Signal", linewidth=2)
+plt.plot(t, deviated_signal, label="Deviated Signal", alpha=0.7)
+plt.plot(t, corrected_signal, label="Corrected Signal (PID + Filters)", linewidth=2)
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+plt.title("PID Correction of Deviated Signal (Full Sine Cycle)")
+plt.legend()
+plt.grid(True)
+plt.show()
