@@ -39,17 +39,17 @@ Public Class MqttBridge
     End Function
 
     Private Function OnConnectedAsync(e As MqttClientConnectedEventArgs) As Task
-        Console.WriteLine("▶ Connected")
+        Console.WriteLine("Connected")
         Return Task.CompletedTask
     End Function
 
     Private Function OnDisconnectedAsync(e As MqttClientDisconnectedEventArgs) As Task
-        Console.WriteLine($"⚠ Disconnected (Reason={e.Reason}) — will auto-reconnect…")
+        Console.WriteLine($"Disconnected (Reason={e.Reason}) — will auto-reconnect…")
         Return Task.CompletedTask
     End Function
 
     Private Function OnConnectingFailedAsync(e As ConnectingFailedEventArgs) As Task
-        Console.WriteLine($"❌ Connect failed: {e.Exception.Message}")
+        Console.WriteLine($"Connect failed: {e.Exception.Message}")
         Return Task.CompletedTask
     End Function
 

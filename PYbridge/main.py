@@ -5,10 +5,10 @@ import sys
 import time
 import signal
 import numpy as np
-import pandas as pd
+from monitor import SineMonitor
 from mqtt import Mqtt
 from collections import deque #rolling buffer
-from parse_data import To_Csv
+#from parse_data import To_Csv
 from moku_device import Ctrl_Moku
 from controller import PID as pid, Low_PassFilter as lpf, Process_Data as process
 
@@ -43,13 +43,32 @@ def main():
         
         off_set = 0.0 #initial voltage offset
         buffer_size = 500
+        buffer_vals = deque(maxlen=buffer_size)
+        buffer_ts   = deque(maxlen=buffer_size)
+
         #pid parameters
         Kp = 0.8
         Ki = 0.05
         Kd = 0.0
         
-        buffer = deque(maxlen=buffer_size) #initalize buffer and set max rolling sample to 500
-        initial_vpp = moku.set_voltage(off_set) #set voltage to 0 as default
+        
+        
+        moku.set_waveform(
+            channel=1,
+            type_="Sine",
+            amplitude = 5.0,   # Vpp; within 0.004..10 for Moku:Go
+            frequency = 1.0,   # Hz; within 1e-3..20e6
+            offset = 0.0,      # V; within -5..+5
+        )
+
+        monitor = SineMonitor(
+            target_freq_hz=None,  # set to a value (ex: 5.0) if you know the desired frequency
+            min_amp=0.3,          # amplitude threshold on normalized data
+            r2_ok=0.90,           # fit quality threshold
+            rmse_ok=0.20          # fit error threshold
+        )
+
+        last_report = time.time()  # Initialize previous time for timestamping
 
         #initalize PID and low pass filter
         pid_controller = pid(Kp, Ki, Kd) 
@@ -61,14 +80,56 @@ def main():
             
             try:
                 #get sensor wave data
-                raw_data = mqtt.q.get(timeout=0.01)  # Get the latest value from MQTT; 
-                buffer.append(raw_data) # Append the latest value to the buffer
+                item = mqtt.q.get(timeout=0.01)  # Get the latest value from MQTT; 
+                if isinstance(item, tuple):
+                    ts, raw_data = item
 
-                if len(buffer) == buffer_size:
-                    #process the buffer to get scaled min/max
-                    err = process_data.sine_process(buffer)  # Process the buffer to get the error value
-                    off_set = low_filter.update(pid_controller.update(err))
-                    moku.set_voltage(off_set) #update voltage offset
+                else:
+                    ts, raw_data = time.time(), item # Get the current timestamp if not provided
+
+                buffer_vals.append(raw_data)
+                buffer_ts.append(ts)
+
+                # 2) drain burst
+                while True:
+                    try:
+                        item = mqtt.q.get_nowait()
+                        if isinstance(item, tuple):
+                            ts, raw_data = item
+                        else:
+                            ts, raw_data = time.time(), item
+                        buffer_vals.append(raw_data)
+                        buffer_ts.append(ts)
+                    except queue.Empty:
+                        break
+
+                # 3) process once
+                if len(buffer_vals) == buffer_size:
+                    # your existing processing -> error, PID, LPF, set_voltage
+                    err = process_data.sine_process(buffer_vals)
+                    pid_out  = pid_controller.update(err)
+                    off_set  = low_filter.update(pid_out)
+                    moku.set_voltage(off_set)
+
+                    # 4) Sine health frequent 0.5
+                    now = time.time()
+                    if now - last_report > 0.5:
+                        # Normalize window to -1,1 before fitting
+                        w = np.array(buffer_vals, dtype=float)
+                        w_min, w_max = float(w.min()), float(w.max())
+                        
+                        if w_max > w_min:
+                            w_norm = (2.0*(w - w_min)/(w_max - w_min)) - 1.0
+                        else:
+                            w_norm = np.zeros_like(w)
+
+                        metrics = monitor.analyze(np.array(buffer_ts, dtype=float), w_norm)
+                        if metrics["ok"]:
+                            print(f"[SINE OK] f~{metrics['f0']:.3f}Hz  R={metrics['R']:.2f}  R²={metrics['r2']:.3f}  RMSE={metrics['rmse']:.3f}  φ={metrics['phi']:.2f} rad")
+                        else:
+                            print(f"[SINE UNKNOWN]  f~{metrics.get('f0',0):.3f}Hz  R={metrics['R']:.2f}  R²={metrics['r2']:.3f}  RMSE={metrics['rmse']:.3f}")
+                        
+                        last_report = now
 
 
             except queue.Empty:

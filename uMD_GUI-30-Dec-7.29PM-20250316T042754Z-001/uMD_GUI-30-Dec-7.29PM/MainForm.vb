@@ -936,7 +936,7 @@ Public Class MainForm
             ' replace with your real broker address/port
             Await _bridge.ConnectAsync("localhost", 1883)
             _mqttStarted = True
-            Console.WriteLine("✅ MQTT bridge connected")
+            Console.WriteLine("MQTT bridge connected")
 
         End If
     End Sub

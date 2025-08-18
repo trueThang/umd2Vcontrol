@@ -1,4 +1,6 @@
 
+
+import time
 import queue #to add in queue and avoid overwrite
 import subprocess #to run the VB.NET executable
 import paho.mqtt.client as mqtt
@@ -34,13 +36,15 @@ class Mqtt():
         #check if data is numeric
         try:
             num = float(msg.payload.decode())
+            ts = time.time()  # Get the current timestamp
+            signal = (ts, num)  
             try:
-                self.q.put_nowait(num)  # Try to add the value to the queue
+                self.q.put_nowait(signal)  # Try to add the value to the queue
                 
             except queue.Full:
                 #handles overflow: 
                 _ = self.q.get_nowait()  # Remove the oldest item if the queue is full
-                self.q.put_nowait(num)   #add the new value
+                self.q.put_nowait(signal)   #add the new value
 
         except ValueError:
             print("Received non-numeric data, ignoring...")
