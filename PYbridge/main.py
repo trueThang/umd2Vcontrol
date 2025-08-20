@@ -62,7 +62,7 @@ def main():
         )
 
         monitor = SineMonitor(
-            target_freq_hz=None,  # set to a value (ex: 5.0) if you know the desired frequency
+            target_freq_hz=1.0,  # set to a value (ex: 1.0) if you know the desired frequency
             min_amp=0.3,          # amplitude threshold on normalized data
             r2_ok=0.90,           # fit quality threshold
             rmse_ok=0.20          # fit error threshold
@@ -74,6 +74,11 @@ def main():
         pid_controller = pid(Kp, Ki, Kd) 
         low_filter = lpf(alpha=0.1)
         process_data = process()  # Initialize the data processing class
+
+        amp_vpp = 5.0
+        safe = 5.0 - amp_vpp/2.0  # => 2.5 V
+        pid_controller.out_min, pid_controller.out_max = -safe, +safe
+
 
         #------------ While getting data
         while not stop_flag: #while stop flag isnt triggered, keep getting data
@@ -105,7 +110,7 @@ def main():
 
                 # 3) process once
                 if len(buffer_vals) == buffer_size:
-                    # your existing processing -> error, PID, LPF, set_voltage
+                    # error, PID, LPF, set_voltage
                     err = process_data.sine_process(buffer_vals)
                     pid_out  = pid_controller.update(err)
                     off_set  = low_filter.update(pid_out)

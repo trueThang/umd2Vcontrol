@@ -1,12 +1,12 @@
-"""
- -------- How-to read----------------------------------------------------------------------
-| When the stream is sine-like, you’ll see periodic [SINE OK]                              |
-|  lines with high R^2, (~1.0), low RMSE (~0), stable f0, and a reasonable amplitude R.      |
-|                                                                                          |
-| If the sensor/plant isn’t behaving, you’ll see [SINE Unkown]                             |
-|  and which metric failed (low R^2, high RMSE, tiny R).                                    |
- ------------------------------------------------------------------------------------------
-"""
+#"""
+# -------- How-to read----------------------------------------------------------------------
+#| When the stream is sine-like, you’ll see periodic [SINE OK]                              |
+#|  lines with high R^2, (~1.0), low RMSE (~0), stable f0, and a reasonable amplitude R.    |
+#|                                                                                          |
+#| If the sensor/plant isn’t behaving, you’ll see [SINE Unkown]                             |
+#|  and which metric failed (low R^2, high RMSE, tiny R).                                   |
+# ------------------------------------------------------------------------------------------
+#"""
 
 # monitor.py
 import numpy as np

@@ -75,7 +75,7 @@ class Ctrl_Moku():
     def set_voltage(self, dc_level):
         """
         Your PID drives 'offset'. Keep amplitude/frequency constant,
-        only update 'offset' within [-5, +5] V as per Moku:Go spec.
+        only update 'offset' within [-5, +5] V
         """
         self.set_waveform(offset=dc_level)
 

@@ -66,14 +66,12 @@ class Process_Data():
     against a reference sine wave.
     """
 
-    def __init__(self, cycles_per_window=1.0, eps=1e-9):
+    def __init__(self, cycles_per_window=1.0, target_freq_hz=None, eps=1e-9):
         self.cycles_per_window = cycles_per_window
+        self.target_freq_hz = target_freq_hz
         self.eps = eps
 
     def sine_process(self, buffer):
-        import pandas as pd
-        import numpy as np
-        from sklearn.preprocessing import MinMaxScaler
 
         df = pd.DataFrame(list(buffer), columns=['Raw'])
 
@@ -83,7 +81,7 @@ class Process_Data():
             return 0.0
 
         # Normalize to [-1, 1] within the window
-        scaler = MinMaxScaler(feature_range=[-1, 1])
+        scaler = MinMaxScaler(feature_range=(-1, 1))
         df['normalized'] = scaler.fit_transform(df[['Raw']])
 
         # Build sine reference; default = 1 cycle per window (same as your existing behavior)
